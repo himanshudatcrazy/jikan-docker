@@ -1,0 +1,29 @@
+version: "3.4"
+
+services:
+  jikan-rest-api:
+    build:
+      context: ./jikan
+      dockerfile: Dockerfile
+    container_name: jikan-rest-api
+    depends_on:
+      - jikan-redis
+    ports:
+      - "8000:8000"
+    networks:
+      - jikan-net
+    restart: always
+    volumes:
+      - ./jikan:/var/www/html
+    command: [ "sh", "entrypoint.sh" ]
+
+  jikan-redis:
+    image: redis:alpine
+    container_name: jikan-redis
+    restart: always
+    networks:
+      - jikan-net
+
+networks:
+  jikan-net:
+    driver: bridge
