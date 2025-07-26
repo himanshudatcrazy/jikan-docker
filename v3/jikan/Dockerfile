@@ -2,7 +2,10 @@ FROM php:7.4-apache-buster
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-RUN apt-get update && apt-get install -y \
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list \
+ && sed -i '/security.debian.org/d' /etc/apt/sources.list \
+ && apt-get update \
+ && apt-get install -y \
     openssl \
     git \
     unzip \
