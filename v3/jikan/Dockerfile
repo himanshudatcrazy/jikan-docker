@@ -9,6 +9,7 @@ RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/source
     openssl \
     git \
     unzip \
+    zip \
  && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
  && composer --version
 
@@ -16,8 +17,10 @@ WORKDIR /var/www/html
 
 RUN git clone --branch=v3 --depth=1 https://github.com/jikan-me/jikan-rest.git . \
  && composer require 'composer/package-versions-deprecated' \
- && composer install --prefer-dist --no-progress --classmap-authoritative --no-interaction \
- && composer update jikan-me/jikan
+ && composer install --no-interaction --prefer-dist --no-dev
+
+COPY --chown=www-data:www-data .env .env
+RUN chmod -R a+w storage
 
 EXPOSE 80
 
