@@ -5,16 +5,25 @@ services:
     build:
       context: ./jikan
       dockerfile: Dockerfile
+    container_name: jikan-rest-api
     depends_on:
       - jikan-redis
     ports:
-      - "8000:80"  # External:Internal
-    env_file:
-      - .env
+      - "8000:8000"
     networks:
-      - default
+      - jikan-net
     restart: always
+    volumes:
+      - ./jikan:/var/www/html
+    command: [ "sh", "entrypoint.sh" ]
 
   jikan-redis:
-    image: redis
+    image: redis:alpine
+    container_name: jikan-redis
     restart: always
+    networks:
+      - jikan-net
+
+networks:
+  jikan-net:
+    driver: bridge
