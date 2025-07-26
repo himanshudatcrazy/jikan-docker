@@ -17,11 +17,7 @@ WORKDIR /var/www/html
 
 RUN git clone --branch=v3 --depth=1 https://github.com/jikan-me/jikan-rest.git . \
  && composer require 'composer/package-versions-deprecated' \
- && composer install --no-interaction --prefer-dist --no-dev
+ && composer install --prefer-dist --no-progress --classmap-authoritative --no-interaction \
+ && composer update jikan-me/jikan
 
-COPY --chown=www-data:www-data .env .env
-RUN chmod -R a+w storage
-
-EXPOSE 80
-
-CMD ["apache2-foreground"]
+EXPOSE 8000
