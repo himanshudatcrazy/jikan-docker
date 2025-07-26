@@ -3,12 +3,14 @@ version: "3.4"
 services:
   jikan-rest-api:
     build:
-      context: jikan
+      context: ./jikan
       dockerfile: Dockerfile
     depends_on:
       - jikan-redis
     ports:
-      - "8000:8000"
+      - "8000:80"  # External:Internal
+    env_file:
+      - .env
     networks:
       - default
     restart: always
